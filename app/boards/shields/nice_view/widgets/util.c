@@ -10,7 +10,7 @@
 
 LV_IMG_DECLARE(bolt);
 
-void rotate_canvas_old(lv_obj_t *canvas, lv_color_t cbuf[]) {
+void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
     // beginning refactor
     lv_canvas_t *canvas_obj = (lv_canvas_t *)canvas;
     int w = canvas_obj->dsc.header.w;
@@ -29,7 +29,7 @@ void rotate_canvas_old(lv_obj_t *canvas, lv_color_t cbuf[]) {
                         CANVAS_SIZE / 2, true);
 }
 
-void rotate_canvas(lv_obj_t *canvas, lv_color_t *cbuf) {
+void rotate_canvas_wip(lv_obj_t *canvas, lv_color_t *cbuf) {
     lv_canvas_t *canvas_obj = (lv_canvas_t *)canvas;
     int w = canvas_obj->dsc.header.w;
     int h = canvas_obj->dsc.header.h;
