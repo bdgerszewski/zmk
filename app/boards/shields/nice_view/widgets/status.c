@@ -236,7 +236,7 @@ static void set_battery_status(struct zmk_widget_status *widget,
 
     draw_top(widget->obj, widget->cbuf, &widget->state);
 }
-
+// battery status updater, this comment is doing some heavy lifting
 static void battery_status_update_cb(struct battery_status_state state) {
     struct zmk_widget_status *widget;
     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_battery_status(widget, state); }
@@ -270,8 +270,10 @@ static void set_output_status(struct zmk_widget_status *widget,
 
     draw_top(widget->obj, widget->cbuf, &widget->state);
     draw_middle(widget->obj, widget->cbuf2, &widget->state);
+    draw_bottom(widget->obj, widget->cbuf3, &widget->state);
 }
 
+// connectivity info: bluetooth profile, connection method and status
 static void output_status_update_cb(struct output_status_state state) {
     struct zmk_widget_status *widget;
     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_output_status(widget, &state); }
@@ -303,7 +305,7 @@ static void set_layer_status(struct zmk_widget_status *widget, struct layer_stat
 
     draw_bottom(widget->obj, widget->cbuf3, &widget->state);
 }
-
+// which layer is active (just 1,2,3 for me, might add a toggle layer for gaming)
 static void layer_status_update_cb(struct layer_status_state state) {
     struct zmk_widget_status *widget;
     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_layer_status(widget, state); }
@@ -320,27 +322,28 @@ ZMK_DISPLAY_WIDGET_LISTENER(widget_layer_status, struct layer_status_state, laye
 
 ZMK_SUBSCRIPTION(widget_layer_status, zmk_layer_state_changed);
 
-static void set_wpm_status(struct zmk_widget_status *widget, struct wpm_status_state state) {
-    for (int i = 0; i < 9; i++) {
-        widget->state.wpm[i] = widget->state.wpm[i + 1];
-    }
-    widget->state.wpm[9] = state.wpm;
+// static void set_wpm_status(struct zmk_widget_status *widget, struct wpm_status_state state) {
+//     for (int i = 0; i < 9; i++) {
+//         widget->state.wpm[i] = widget->state.wpm[i + 1];
+//     }
+//     widget->state.wpm[9] = state.wpm;
 
-    draw_top(widget->obj, widget->cbuf, &widget->state);
-}
+//     draw_top(widget->obj, widget->cbuf, &widget->state);
+// }
 
-static void wpm_status_update_cb(struct wpm_status_state state) {
-    struct zmk_widget_status *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_wpm_status(widget, state); }
-}
+// unused
+// static void wpm_status_update_cb(struct wpm_status_state state) {
+//     struct zmk_widget_status *widget;
+//     SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_wpm_status(widget, state); }
+// }
 
-struct wpm_status_state wpm_status_get_state(const zmk_event_t *eh) {
-    return (struct wpm_status_state){.wpm = zmk_wpm_get_state()};
-};
+// struct wpm_status_state wpm_status_get_state(const zmk_event_t *eh) {
+//     return (struct wpm_status_state){.wpm = zmk_wpm_get_state()};
+// };
 
-ZMK_DISPLAY_WIDGET_LISTENER(widget_wpm_status, struct wpm_status_state, wpm_status_update_cb,
-                            wpm_status_get_state)
-ZMK_SUBSCRIPTION(widget_wpm_status, zmk_wpm_state_changed);
+// ZMK_DISPLAY_WIDGET_LISTENER(widget_wpm_status, struct wpm_status_state, wpm_status_update_cb,
+//                             wpm_status_get_state)
+// ZMK_SUBSCRIPTION(widget_wpm_status, zmk_wpm_state_changed);
 
 int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
     widget->obj = lv_obj_create(parent);
@@ -372,7 +375,7 @@ int zmk_widget_status_init(struct zmk_widget_status *widget, lv_obj_t *parent) {
     widget_battery_status_init();
     widget_output_status_init();
     widget_layer_status_init();
-    widget_wpm_status_init();
+    // widget_wpm_status_init();
 
     return 0;
 }
