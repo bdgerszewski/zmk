@@ -10,7 +10,12 @@
 
 LV_IMG_DECLARE(bolt);
 
-void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
+void rotate_canvas_old(lv_obj_t *canvas, lv_color_t cbuf[]) {
+    // beginning refactor
+    lv_canvas_t *canvas_obj = (lv_canvas_t *)canvas;
+    int w = canvas_obj->dsc.header.w;
+    int h = canvas_obj->dsc.header.h;
+    // original code
     static lv_color_t cbuf_tmp[CANVAS_SIZE * CANVAS_SIZE];
     memcpy(cbuf_tmp, cbuf, sizeof(cbuf_tmp));
     lv_img_dsc_t img;
@@ -22,6 +27,37 @@ void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
     lv_canvas_fill_bg(canvas, LVGL_BACKGROUND, LV_OPA_COVER);
     lv_canvas_transform(canvas, &img, 900, LV_IMG_ZOOM_NONE, -1, 0, CANVAS_SIZE / 2,
                         CANVAS_SIZE / 2, true);
+}
+
+void rotate_canvas(lv_obj_t *canvas, lv_color_t *cbuf) {
+    lv_canvas_t *canvas_obj = (lv_canvas_t *)canvas;
+    int w = canvas_obj->dsc.header.w;
+    int h = canvas_obj->dsc.header.h;
+
+    // Dynamic allocation of temporary buffer based on canvas dimensions
+    lv_color_t *cbuf_tmp = malloc(sizeof(lv_color_t) * w * h);
+    if (cbuf_tmp == NULL) {
+        return; // Memory allocation failed, handle appropriately
+    }
+
+    // Copy original canvas buffer to temporary buffer
+    memcpy(cbuf_tmp, cbuf, sizeof(lv_color_t) * w * h);
+
+    // Set up image descriptor using the temporary buffer
+    lv_img_dsc_t img;
+    img.data = (void *)cbuf_tmp;
+    img.header.cf = LV_IMG_CF_TRUE_COLOR;
+    img.header.w = w;
+    img.header.h = h;
+
+    // Fill the background (optional, depends on your needs)
+    lv_canvas_fill_bg(canvas, lv_color_hex(0xFFFFFF), LV_OPA_COVER);
+
+    // Perform the rotation transform on the canvas
+    lv_canvas_transform(canvas, &img, 900, LV_IMG_ZOOM_NONE, 0, 0, w / 2, h / 2, true);
+
+    // Free the temporary buffer
+    free(cbuf_tmp);
 }
 
 void draw_battery(lv_obj_t *canvas, const struct status_state *state) {
