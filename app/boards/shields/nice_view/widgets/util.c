@@ -12,9 +12,9 @@ LV_IMG_DECLARE(bolt);
 
 void rotate_canvas(lv_obj_t *canvas, lv_color_t cbuf[]) {
     // beginning refactor
-    lv_canvas_t *canvas_obj = (lv_canvas_t *)canvas;
-    int w = canvas_obj->dsc.header.w;
-    int h = canvas_obj->dsc.header.h;
+    // lv_canvas_t *canvas_obj = (lv_canvas_t *)canvas;
+    // int w = canvas_obj->dsc.header.w;
+    // int h = canvas_obj->dsc.header.h;
     // original code
     static lv_color_t cbuf_tmp[CANVAS_SIZE * CANVAS_SIZE];
     memcpy(cbuf_tmp, cbuf, sizeof(cbuf_tmp));
