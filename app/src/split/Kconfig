@@ -9,6 +9,13 @@ if ZMK_SPLIT
 config ZMK_SPLIT_ROLE_CENTRAL
     bool "Split central device"
 
+config DISPLAY_ROLE_CENTRAL
+    bool "Enable central display role"
+    default n
+    help
+      Enable this to configure the display for the central role in nice!view.
+
+
 choice ZMK_SPLIT_TRANSPORT
     prompt "Split transport"
 
