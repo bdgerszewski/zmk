@@ -1,6 +1,12 @@
 # Copyright (c) 2023 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
+config DISPLAY_ROLE_CENTRAL
+    bool "Enable central display role"
+    default n
+    help
+      Enable this to configure the display for the central role in nice!view.
+
 if SHIELD_NICE_VIEW
 
 config LV_Z_VDB_SIZE
